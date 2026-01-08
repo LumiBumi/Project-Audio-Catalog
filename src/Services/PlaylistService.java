@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlaylistService {
-    private List<Playlist> playlists = new ArrayList<>();
+    private static List<Playlist> playlists = new ArrayList<>();
 
-    public List<Playlist> getPlaylist(){return playlists;}
+    public static List<Playlist> getPlaylist(){return playlists;}
 
-    public boolean addPlaylist(Playlist playlist) {
+    public static boolean addPlaylist(Playlist playlist) {
         if(searchByTitle(playlist.getTitle())!=null){
             return false;
         }
@@ -18,11 +18,11 @@ public class PlaylistService {
         return true;
     }
 
-    public boolean removePlaylist(Playlist playlist) {
+    public static boolean removePlaylist(Playlist playlist) {
         return playlists.remove(playlist);
     }
 
-    public Playlist searchByTitle(String title) {
+    public static Playlist searchByTitle(String title) {
         String searchTitle = title.toLowerCase();
 
         for (Playlist item : playlists) {

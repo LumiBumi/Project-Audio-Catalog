@@ -13,9 +13,6 @@ public class Main {
 
     private static final Scanner sc = new Scanner(System.in);
 
-    private static final PlaylistService playlistService = new PlaylistService();
-    private static final AlbumService albumService = new AlbumService();
-
     public static void main(String[] args) {
         try {
             List<MediaFile> loadedData = CatalogStorage.load(CATALOG_FILE);
@@ -30,13 +27,13 @@ public class Main {
 
         try {
             List<Playlist> loadedPlaylists = PlaylistStorage.load(PLAYLIST_FILE);
-            playlistService.getPlaylist().addAll(loadedPlaylists);
+            PlaylistService.getPlaylist().addAll(loadedPlaylists);
             System.out.println("Playlists loaded: " + loadedPlaylists.size());
         } catch (IOException e) {
             System.out.println("Could not load playlists: " + e.getMessage());
         }
 
-        albumService.createAlbums();
+        AlbumService.createAlbums();
 
 
         //Главното меню
@@ -146,7 +143,7 @@ public class Main {
 
         CatalogService.createAndAdd(title, genre, duration, type, author, year, album);
 
-        albumService.createAlbums();
+        AlbumService.createAlbums();
     }
 
     private static void removeMedia() {
@@ -201,11 +198,11 @@ public class Main {
             if (removed) {
                 System.out.println("Item removed from Catalog");
 
-                for (Playlist p : playlistService.getPlaylist()) {
+                for (Playlist p : PlaylistService.getPlaylist()) {
                     p.removeByID(idToRemove);
                 }
 
-                albumService.createAlbums();
+                AlbumService.createAlbums();
             } else {
                 System.out.println("Error: Could not remove item");
             }
@@ -214,7 +211,7 @@ public class Main {
 
     private static void showAlbums() {
         System.out.println("\n    Albums Collection");
-        List<Album> albums = albumService.getAlbums();
+        List<Album> albums = AlbumService.getAlbums();
 
         if (albums.isEmpty()) {
             System.out.println("No albums found (only singles or empty catalog)");
@@ -282,14 +279,14 @@ public class Main {
                 case "1" -> {
                     System.out.print("Playlist Name: ");
                     String name = sc.nextLine();
-                    if (playlistService.addPlaylist(new Playlist(name))) {
+                    if (PlaylistService.addPlaylist(new Playlist(name))) {
                         System.out.println("Playlist created");
                     } else {
                         System.out.println("Playlist with this name already exists");
                     }
                 }
                 case "2" -> {
-                    for (Playlist p : playlistService.getPlaylist()) {
+                    for (Playlist p : PlaylistService.getPlaylist()) {
                         System.out.println(p);
                     }
                 }
@@ -301,7 +298,7 @@ public class Main {
     private static void managePlaylist() {
         System.out.print("Enter Playlist Name to open: ");
         String name = sc.nextLine();
-        Playlist p = playlistService.searchByTitle(name);
+        Playlist p = PlaylistService.searchByTitle(name);
 
         if (p == null) {
             System.out.println("Playlist not found");
@@ -423,7 +420,7 @@ public class Main {
         System.out.println("Saving data");
         try {
             CatalogStorage.save(CatalogService.getCatalog(), CATALOG_FILE);
-            PlaylistStorage.save(playlistService.getPlaylist(), PLAYLIST_FILE);
+            PlaylistStorage.save(PlaylistService.getPlaylist(), PLAYLIST_FILE);
             System.out.println("Data saved");
         } catch (IOException e) {
             System.out.println("Error saving data: " + e.getMessage());
