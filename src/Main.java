@@ -47,7 +47,7 @@ public class Main {
             System.out.println("3. Remove Media");
             System.out.println("4. Search Media");
             System.out.println("5. Playlists Menu");
-            System.out.println("6. Albums Menu");
+            System.out.println("6. Show Albums");
             System.out.println("0. Save & Exit");
             System.out.print("Choose option: ");
 
@@ -64,7 +64,7 @@ public class Main {
                     saveAndExit();
                     return;
                 }
-                default -> System.out.println("Invalid option! Try again.");
+                default -> System.out.println("Invalid option! Try again");
             }
         }
     }
@@ -75,7 +75,7 @@ public class Main {
         System.out.println("\n    Current Catalog");
         List<MediaFile> list = CatalogService.getCatalog();
         if (list.isEmpty()) {
-            System.out.println("Catalog is empty.");
+            System.out.println("Catalog is empty");
         } else {
             for (MediaFile item : list) {
                 System.out.println(item);
@@ -112,7 +112,7 @@ public class Main {
                     System.out.println("Invalid year! Please enter a year between 1900 and 2026");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input! Please enter a number.");
+                System.out.println("Invalid input! Please enter a number");
             }
         }
 
@@ -127,10 +127,10 @@ public class Main {
                 if (duration > 0 && duration <= 86400) {
                     break;
                 } else {
-                    System.out.println("Invalid duration! Must be between 1 second and 86400 seconds (24h).");
+                    System.out.println("Invalid duration! Must be between 1 second and 86400 seconds (24h)");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input! Please enter a number.");
+                System.out.println("Invalid input! Please enter a number");
             }
         }
 
@@ -141,7 +141,7 @@ public class Main {
             type = AudioType.valueOf(typeStr);
         } catch (IllegalArgumentException e) {
             type = AudioType.SONG;
-            System.out.println("Invalid type. Set to SONG by default.");
+            System.out.println("Invalid type. Set to SONG by default");
         }
 
         CatalogService.createAndAdd(title, genre, duration, type, author, year, album);
@@ -150,26 +150,65 @@ public class Main {
     }
 
     private static void removeMedia() {
-        showCatalog();
-        System.out.print("Enter ID to remove: ");
-        try {
-            int id = Integer.parseInt(sc.nextLine());
-            boolean removed = CatalogService.remove(id);
+        System.out.println("\n    Remove Media");
 
+        System.out.print("Enter Title or Author to remove: ");
+        String input = sc.nextLine();
+
+        List<MediaFile> matches = CatalogService.searchByTitleAndAuthor(input, input);
+        int idToRemove = -1;
+
+        if (matches.isEmpty()) {
+            System.out.println("No media found matching '" + input + "'");
+            return;
+        }
+        else if (matches.size() == 1) {
+            MediaFile item = matches.get(0);
+            System.out.println("Found: " + item);
+            System.out.print("Are you sure you want to delete it? (Yes/No): ");
+            if (sc.nextLine().equalsIgnoreCase("yes")) {
+                idToRemove = item.getId();
+            } else {
+                System.out.println("Operation cancelled");
+                return;
+            }
+        }
+        else {
+            System.out.println("Multiple matches found:");
+            for (MediaFile m : matches) System.out.println(m);
+
+            System.out.print("Enter ID to delete: ");
+            try {
+                int inputId = Integer.parseInt(sc.nextLine());
+                for(MediaFile m : matches) {
+                    if(m.getId() == inputId) {
+                        idToRemove = inputId;
+                        break;
+                    }
+                }
+                if (idToRemove == -1) {
+                    System.out.println("ID not found in the search results");
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid ID");
+                return;
+            }
+        }
+
+        if (idToRemove != -1) {
+            boolean removed = CatalogService.remove(idToRemove);
             if (removed) {
-                System.out.println("Item removed successfully.");
+                System.out.println("Item removed from Catalog");
 
                 for (Playlist p : playlistService.getPlaylist()) {
-                    p.removeByID(id);
+                    p.removeByID(idToRemove);
                 }
 
                 albumService.createAlbums();
-
             } else {
-                System.out.println("ID not found.");
+                System.out.println("Error: Could not remove item");
             }
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid ID.");
         }
     }
 
@@ -178,7 +217,7 @@ public class Main {
         List<Album> albums = albumService.getAlbums();
 
         if (albums.isEmpty()) {
-            System.out.println("No albums found (only singles or empty catalog).");
+            System.out.println("No albums found (only singles or empty catalog)");
         } else {
             for (Album a : albums) {
                 System.out.println(a);
@@ -213,17 +252,17 @@ public class Main {
                     int year = Integer.parseInt(sc.nextLine());
                     results = CatalogService.searchByYear(year);
                 } catch (NumberFormatException e) {
-                    System.out.println("Invalid year.");
+                    System.out.println("Invalid year");
                 }
             }
-            default -> System.out.println("Invalid option.");
+            default -> System.out.println("Invalid option");
         }
 
         if (results != null && !results.isEmpty()) {
             System.out.println("Found " + results.size() + " items:");
             for (MediaFile m : results) System.out.println(m);
         } else {
-            System.out.println("No results found.");
+            System.out.println("No results found");
         }
     }
 
@@ -244,9 +283,9 @@ public class Main {
                     System.out.print("Playlist Name: ");
                     String name = sc.nextLine();
                     if (playlistService.addPlaylist(new Playlist(name))) {
-                        System.out.println("Playlist created.");
+                        System.out.println("Playlist created");
                     } else {
-                        System.out.println("Playlist with this name already exists.");
+                        System.out.println("Playlist with this name already exists");
                     }
                 }
                 case "2" -> {
@@ -265,7 +304,7 @@ public class Main {
         Playlist p = playlistService.searchByTitle(name);
 
         if (p == null) {
-            System.out.println("Playlist not found.");
+            System.out.println("Playlist not found");
             return;
         }
 
@@ -284,7 +323,7 @@ public class Main {
 
             switch (ch) {
                 case "1" -> {
-                    if (p.getItems().isEmpty()) System.out.println("Playlist is empty.");
+                    if (p.getItems().isEmpty()) System.out.println("Playlist is empty");
                     else for (MediaFile m : p.getItems()) System.out.println(m);
                 }
                 case "2" -> {
@@ -294,7 +333,7 @@ public class Main {
                     List<MediaFile> matches = CatalogService.searchByTitleAndAuthor(input, input);
 
                     if (matches.isEmpty()) {
-                        System.out.println("No matches found for '" + input + "'.");
+                        System.out.println("No matches found for '" + input + "'");
                     }
                     else if (matches.size() == 1) {
                         MediaFile item = matches.get(0);
@@ -323,26 +362,45 @@ public class Main {
                                 p.add(selected);
                                 System.out.println("Added: " + selected.getTitle());
                             } else {
-                                System.out.println("ID not found in the search results.");
+                                System.out.println("ID not found in the search results");
                             }
                         } catch (NumberFormatException e) {
-                            System.out.println("Invalid input format.");
+                            System.out.println("Invalid input format");
                         }
                     }
                 }
                 case "3" -> {
-                    System.out.print("Enter ID to remove: ");
-                    try {
-                        int id = Integer.parseInt(sc.nextLine());
-                        if (p.removeByID(id)) System.out.println("Removed.");
-                        else System.out.println("ID not found in this playlist.");
-                    } catch (NumberFormatException e) {
-                        System.out.println("Invalid ID.");
+                    System.out.print("Enter Song Title or Author to remove: ");
+                    String input = sc.nextLine();
+
+                    List<MediaFile> matches = p.searchByTitleAndAuthor(input, input);
+
+                    if (matches.isEmpty()) {
+                            System.out.println("No matches found");
+                    }
+                    else if (matches.size() == 1) {
+                        MediaFile item = matches.get(0);
+                        if (p.removeByID(item.getId())) {
+                            System.out.println("Removed: " + item.getTitle());
+                        }
+                    }
+                    else {
+                        System.out.println("Multiple matches found in playlist:");
+                        for (MediaFile m : matches) System.out.println(m);
+
+                        System.out.print("Enter ID from list above to remove: ");
+                        try {
+                            int id = Integer.parseInt(sc.nextLine());
+                            if (p.removeByID(id)) System.out.println("Removed");
+                            else System.out.println("ID not found");
+                        } catch (NumberFormatException e) {
+                            System.out.println("Invalid ID format");
+                        }
                     }
                 }
                 case "4" -> {
                     p.sortByTitle();
-                    System.out.println("Playlist sorted.");
+                    System.out.println("Playlist sorted");
                 }
                 case "5" -> {
                     System.out.print("Search (Title/Author): ");
@@ -350,13 +408,13 @@ public class Main {
                     List<MediaFile> results = p.searchByTitleAndAuthor(query, query);
 
                     if (results.isEmpty()) {
-                        System.out.println("No matches in this playlist.");
+                        System.out.println("No matches in this playlist");
                     } else {
                         System.out.println("Found " + results.size() + " songs:");
                         for (MediaFile m : results) System.out.println(m);
                     }
                 }
-                default -> System.out.println("Invalid option.");
+                default -> System.out.println("Invalid option");
             }
         }
     }

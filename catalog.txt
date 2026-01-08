@@ -1,1 +1,7 @@
 1|SONG|Jingle Bells Rock For Me|Rustage|single|89|rap|2025
+2|SONG|HONEY (ARE U COMING?)|Maneskin|Rush|167|Rock|2023
+3|SONG|OWN MY MIND|Maneskin|Rush|191|Rock|2023
+4|SONG|TIMEZONE|Maneskin|Rush|168|Rock|2023
+5|SONG|DON't WANNA SLEEP|Maneskin|Rush|156|Rock|2023
+6|SONG|BOMBSHELL|Rustage|single|196|rap|2025
+7|SONG|ATOMIC|Rustage|single|172|rap|2025
