@@ -31,13 +31,15 @@ public class AlbumService {
                 continue;
             }
 
-            if (!mapOfAlbums.containsKey(cleanName)) {
+            String uniqeKey = cleanName.toLowerCase() + "|" + song.getAuthor().toLowerCase();
+
+            if (!mapOfAlbums.containsKey(uniqeKey)) {
                 Album newAlbum = new Album(cleanName, song.getAuthor());
-                mapOfAlbums.put(cleanName, newAlbum);
+                mapOfAlbums.put(uniqeKey, newAlbum);
                 albums.add(newAlbum);
             }
 
-            mapOfAlbums.get(cleanName).add(song);
+            mapOfAlbums.get(uniqeKey).add(song);
         }
     }
 }

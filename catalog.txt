@@ -8,3 +8,4 @@
 3|SONG|OWN MY MIND|Maneskin|Rush|191|ROCK|2023
 2|SONG|HONEY (ARE U COMING?)|Maneskin|Rush|167|ROCK|2023
 1|SONG|Jingle Bells Rock For Me|Rustage|single|89|RAP|2025
+12|SONG|Marijua|Harly|Rush|200|ROCK|2000
