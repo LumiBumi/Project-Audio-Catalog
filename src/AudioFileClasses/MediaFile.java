@@ -3,14 +3,14 @@ package AudioFileClasses;
 public class MediaFile {
     private int id;
     private String title;
-    private String genre;
+    private Genre genre;
     private int duration;
     private AudioType type;
     private String author;
     private int year;
     private String album;
 
-    public MediaFile(int id, String title, String genre, int duration, AudioType type,
+    public MediaFile(int id, String title, Genre genre, int duration, AudioType type,
     String author, int year, String album) {
         this.id = id;
         this.title = title;
@@ -31,7 +31,7 @@ public class MediaFile {
 
     public int getId() {return id;}
     public String getTitle() {return title;}
-    public String getGenre() {return genre;}
+    public Genre getGenre() {return genre;}
     public int getDuration() {return duration;}
     public AudioType getType() {return type;}
     public String getAuthor() {return author;}
@@ -77,7 +77,7 @@ public class MediaFile {
         return new MediaFile(
                 Integer.parseInt(p[0]),
                 p[2],
-                p[6],
+                Genre.valueOf(p[6]),
                 Integer.parseInt(p[5]),
                 AudioType.valueOf(p[1]),
                 p[3],

@@ -1,8 +1,10 @@
-1|SONG|Jingle Bells Rock For Me|Rustage|single|89|rap|2025
-2|SONG|HONEY (ARE U COMING?)|Maneskin|Rush|167|Rock|2023
-3|SONG|OWN MY MIND|Maneskin|Rush|191|Rock|2023
-4|SONG|TIMEZONE|Maneskin|Rush|168|Rock|2023
-5|SONG|DON't WANNA SLEEP|Maneskin|Rush|156|Rock|2023
-7|SONG|ATOMIC|Rustage|single|172|rap|2025
-8|SONG|Shape of You|Ed Sheeran|Devide|233|Pop|2017
-9|SONG|Dive|Ed Sheeran|Devide|238|Pop|2017
+11|SONG|Fly me to the moon|Frank Sinatra|Ultimate Sinatra|147|JAZZ|2025
+10|SONG|The Entertainer|Max Wassen|single|193|JAZZ|2022
+9|SONG|Dive|Ed Sheeran|Devide|238|POP|2017
+8|SONG|Shape of You|Ed Sheeran|Devide|233|POP|2017
+7|SONG|ATOMIC|Rustage|single|172|RAP|2025
+5|SONG|DON't WANNA SLEEP|Maneskin|Rush|156|ROCK|2023
+4|SONG|TIMEZONE|Maneskin|Rush|168|ROCK|2023
+3|SONG|OWN MY MIND|Maneskin|Rush|191|ROCK|2023
+2|SONG|HONEY (ARE U COMING?)|Maneskin|Rush|167|ROCK|2023
+1|SONG|Jingle Bells Rock For Me|Rustage|single|89|RAP|2025

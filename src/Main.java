@@ -112,18 +112,96 @@ public class Main {
 
     private static void addNewItem() {
         System.out.println("\n    Add New Media");
+        String title;
+        String author;
 
-        System.out.print("Title: ");
-        String title = sc.nextLine();
+        System.out.println("Type (SONG, AUDIOBOOK, PODCAST): ");
+        String typeStr = sc.nextLine().toUpperCase();
+        AudioType type;
+        try {
+            type = AudioType.valueOf(typeStr);
+        } catch (IllegalArgumentException e) {
+            type = AudioType.SONG;
+            System.out.println("Invalid type. Set to SONG by default");
+        }
 
-        System.out.print("Author: ");
-        String author = sc.nextLine();
+        while(true){
+            System.out.print("Title: ");
+            title = sc.nextLine();
+            if(title.trim().isEmpty()){
+                System.out.println("Invalid title! Try again");
+                continue;
+            }
+            break;
+        }
+
+        while(true){
+            System.out.print("Author: ");
+            author = sc.nextLine();
+            if(author.trim().isEmpty()){
+                System.out.println("Invalid author! Try again");
+                continue;
+            }
+            break;
+        }
 
         System.out.print("Album (type 'none' if single): ");
         String album = sc.nextLine();
 
-        System.out.print("Genre: ");
-        String genre = sc.nextLine();
+        List<Genre> allowedGenres = new ArrayList<>();
+
+        switch (type) {
+            case SONG -> {
+                allowedGenres.add(Genre.ROCK);
+                allowedGenres.add(Genre.POP);
+                allowedGenres.add(Genre.JAZZ);
+                allowedGenres.add(Genre.CLASSICAL);
+                allowedGenres.add(Genre.METAL);
+                allowedGenres.add(Genre.HIP_HOP);
+                allowedGenres.add(Genre.ELECTRONIC);
+                allowedGenres.add(Genre.REGGAE);
+                allowedGenres.add(Genre.BLUES);
+                allowedGenres.add(Genre.COUNTRY);
+                allowedGenres.add(Genre.RAP);
+                allowedGenres.add(Genre.OTHER);
+                System.out.println("Available Music Genres: Rock, Pop, Jazz, Metal, Hip_Hop, etc.");
+            }
+
+            case AUDIOBOOK, PODCAST -> {
+                allowedGenres.add(Genre.FANTASY);
+                allowedGenres.add(Genre.ROMANCE);
+                allowedGenres.add(Genre.SCIFI);
+                allowedGenres.add(Genre.HISTORY);
+                allowedGenres.add(Genre.BIOGRAPHY);
+                allowedGenres.add(Genre.THRILLER);
+                allowedGenres.add(Genre.EDUCATION);
+                allowedGenres.add(Genre.TECHNOLOGY);
+                allowedGenres.add(Genre.OTHER);
+                System.out.println("Available Categories: Fantasy, History, SciFi, Education, etc.");
+            }
+        }
+
+        Genre genre = Genre.OTHER;
+
+        while (true) {
+            System.out.print("Genre: ");
+            String input = sc.nextLine().toUpperCase().trim();
+
+            try {
+                Genre selectedGenre = Genre.valueOf(input);
+
+                if (allowedGenres.contains(selectedGenre)) {
+                    genre = selectedGenre;
+                    break;
+                } else {
+                    System.out.println("Logic Error: You cannot select '" + selectedGenre + "' for a " + type);
+                    System.out.println("Please select a valid genre from the list above.");
+                }
+
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid genre! Please check spelling.");
+            }
+        }
 
         int year = 0;
         while (true) {
@@ -151,24 +229,14 @@ public class Main {
             try {
                 duration = Integer.parseInt(input);
 
-                if (duration > 0 && duration <= 86400) {
+                if (duration > 30 && duration <= 86400) {
                     break;
                 } else {
-                    System.out.println("Invalid duration! Must be between 1 second and 86400 seconds (24h)");
+                    System.out.println("Invalid duration! Must be between 30 second and 86400 seconds (24h)");
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input! Please enter a number");
             }
-        }
-
-        System.out.println("Type (SONG, AUDIOBOOK, PODCAST): ");
-        String typeStr = sc.nextLine().toUpperCase();
-        AudioType type;
-        try {
-            type = AudioType.valueOf(typeStr);
-        } catch (IllegalArgumentException e) {
-            type = AudioType.SONG;
-            System.out.println("Invalid type. Set to SONG by default");
         }
 
         CatalogService.createAndAdd(title, genre, duration, type, author, year, album);

@@ -1,6 +1,7 @@
 package Services;
 
 import AudioFileClasses.AudioType;
+import AudioFileClasses.Genre;
 import AudioFileClasses.MediaFile;
 
 import java.util.*;
@@ -10,7 +11,7 @@ public class CatalogService {
 
     public static List<MediaFile> getCatalog() {return catalog;}
 
-    public static void createAndAdd(String title, String genre, int duration,
+    public static void createAndAdd(String title, Genre genre, int duration,
                                     AudioType type, String author, int year, String album) {
         if(isDuplicate(title, author, album)){
             System.out.println("This media already exists in the catalog!");
@@ -99,7 +100,7 @@ public class CatalogService {
         List<MediaFile> list = new ArrayList<>();
         String searchGenre = genre.toLowerCase();
         for (MediaFile item : catalog) {
-            if (item.getGenre().toLowerCase().contains(searchGenre)) {
+            if (item.getGenre().toString().toLowerCase().contains(searchGenre)) {
                 list.add(item);
             }
         }
