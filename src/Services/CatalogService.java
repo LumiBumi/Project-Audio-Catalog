@@ -137,4 +137,22 @@ public class CatalogService {
             }
         });
     }
+
+    public static void sortByNewest() {
+        catalog.sort(new Comparator<MediaFile>() {
+            @Override
+            public int compare(MediaFile item1, MediaFile item2) {
+                return Integer.compare(item2.getId(), item1.getId());
+            }
+        });
+    }
+
+    public static void sortByOldest() {
+        catalog.sort(new Comparator<MediaFile>() {
+            @Override
+            public int compare(MediaFile item1, MediaFile item2) {
+                return Integer.compare(item1.getId(), item2.getId());
+            }
+        });
+    }
 }

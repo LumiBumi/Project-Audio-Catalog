@@ -15,11 +15,6 @@ public class PlaylistService {
         if(searchByTitle(playlist.getTitle())!=null){
             return false;
         }
-        for (Playlist p : playlists){
-            if(p.getTitle().equals(playlist.getTitle())){
-
-            }
-        }
         playlists.add(playlist);
         return true;
     }
@@ -31,7 +26,7 @@ public class PlaylistService {
     public static Playlist searchByTitle(String title) {
 
         for (Playlist item : playlists) {
-            if (item.getTitle().toLowerCase().equalsIgnoreCase(title)) {
+            if (item.getTitle().equalsIgnoreCase(title)) {
                 return item;
             }
         }

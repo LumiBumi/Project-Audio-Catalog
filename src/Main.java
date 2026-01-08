@@ -1,6 +1,7 @@
 import AudioFileClasses.*;
 import Services.*;
 import Storages.*;
+import org.w3c.dom.ls.LSOutput;
 
 import java.io.IOException;
 import java.util.List;
@@ -37,6 +38,7 @@ public class Main {
 
 
         //Главното меню
+
         while (true) {
             System.out.println("\n___ MY AUDIO CATALOG ___");
             System.out.println("1. Show All Media");
@@ -45,6 +47,7 @@ public class Main {
             System.out.println("4. Search Media");
             System.out.println("5. Playlists Menu");
             System.out.println("6. Show Albums");
+            System.out.println("7. Sort Catalog");
             System.out.println("0. Save & Exit");
             System.out.print("Choose option: ");
 
@@ -57,6 +60,7 @@ public class Main {
                 case "4" -> searchMenu();
                 case "5" -> playlistMenu();
                 case "6" -> showAlbums();
+                case "7" -> sortCatalog();
                 case "0" -> {
                     saveAndExit();
                     return;
@@ -78,6 +82,33 @@ public class Main {
                 System.out.println(item);
             }
         }
+    }
+
+    private static void sortCatalog(){
+        System.out.println("\n    Sorting Option");
+        System.out.println("1. Sort By Title");
+        System.out.println("2. Sort By Newest");
+        System.out.println("3. Sort By Oldest");
+        System.out.println("0. Exit");
+        System.out.print("Choose option: ");
+        String choice = sc.nextLine();
+
+        if(choice.equals("0")){return;}
+
+        switch (choice){
+            case "1" -> {
+                CatalogService.sortByTitle();
+            }
+            case "2" -> {
+                CatalogService.sortByNewest();
+            }
+            case "3" -> {
+                CatalogService.sortByOldest();
+            }
+            default ->  System.out.println("Invalid choice! Try again");
+        }
+        System.out.println("Catalog sorted");
+        showCatalog();
     }
 
     private static void addNewItem() {
@@ -160,7 +191,7 @@ public class Main {
             return;
         }
         else if (matches.size() == 1) {
-            MediaFile item = matches.get(0);
+            MediaFile item = matches.getFirst();
             System.out.println("Found: " + item);
             System.out.print("Are you sure you want to delete it? (Yes/No): ");
             if (sc.nextLine().equalsIgnoreCase("yes")) {
@@ -214,7 +245,7 @@ public class Main {
         List<Album> albums = AlbumService.getAlbums();
 
         if (albums.isEmpty()) {
-            System.out.println("No albums found (only singles or empty catalog)");
+            System.out.println("No albums found");
         } else {
             for (Album a : albums) {
                 System.out.println(a);
@@ -305,12 +336,12 @@ public class Main {
             return;
         }
 
-        boolean pleylistExists = true;
-        while (pleylistExists) {
+        boolean playlistExists = true;
+        while (playlistExists) {
             System.out.println("\n    Managing: " + p.getTitle());
-            System.out.println("1. Show songs");
-            System.out.println("2. Add song (Smart Search)");
-            System.out.println("3. Remove song from Playlist");
+            System.out.println("1. Show media");
+            System.out.println("2. Add media (Smart Search)");
+            System.out.println("3. Remove media from Playlist");
             System.out.println("4. Sort by Title");
             System.out.println("5. Search inside Playlist");
             System.out.println("6. Remove Playlist");
@@ -335,8 +366,17 @@ public class Main {
                         System.out.println("No matches found for '" + input + "'");
                     }
                     else if (matches.size() == 1) {
-                        MediaFile item = matches.get(0);
-                        p.add(item);
+                        MediaFile item = matches.getFirst();
+                        System.out.println(item);
+                        System.out.println("Is this the media that you wanted to add? (Yes/No):");
+                        if(sc.nextLine().equalsIgnoreCase("yes")){
+                            p.add(item);
+                        }
+                        else{
+                            System.out.println("Operation cancelled");
+                            return;
+                        }
+
                         System.out.println("Found exact match! Added: " + item.getTitle());
                     }
                     else {
@@ -345,7 +385,7 @@ public class Main {
                             System.out.println(m);
                         }
 
-                        System.out.print("Enter the ID of the song you want to add from the list above: ");
+                        System.out.print("Enter the ID of the media you want to add from the list above: ");
                         try {
                             int id = Integer.parseInt(sc.nextLine());
 
@@ -369,7 +409,7 @@ public class Main {
                     }
                 }
                 case "3" -> {
-                    System.out.print("Enter Song Title or Author to remove: ");
+                    System.out.print("Enter Media Title or Author to remove: ");
                     String input = sc.nextLine();
 
                     List<MediaFile> matches = p.searchByTitleAndAuthor(input, input);
@@ -378,9 +418,17 @@ public class Main {
                             System.out.println("No matches found");
                     }
                     else if (matches.size() == 1) {
-                        MediaFile item = matches.get(0);
-                        if (p.removeByID(item.getId())) {
-                            System.out.println("Removed: " + item.getTitle());
+                        MediaFile item = matches.getFirst();
+                        System.out.println(item);
+                        System.out.println("Is this the  media that you wanted to remove? (Yes/No):");
+                        if(sc.nextLine().equalsIgnoreCase("yes")){
+                            if (p.removeByID(item.getId())) {
+                                System.out.println("Removed: " + item.getTitle());
+                            }
+                        }
+                        else {
+                            System.out.println("Operation cancelled");
+                            return;
                         }
                     }
                     else {
@@ -416,9 +464,17 @@ public class Main {
                 case "6" -> {
                     System.out.println("Are you sure? (Yes/No):");
                     if(sc.nextLine().equalsIgnoreCase("yes")){
-                        PlaylistService.removePlaylist(p);
-                        System.out.println("Playlist removed");
-                        pleylistExists = false;
+                        playlistExists = !PlaylistService.removePlaylist(p);
+                        if(!playlistExists) {
+                            System.out.println("Playlist removed");
+                        }
+                        else{
+                            System.out.println("Playlist couldn't be removed");
+                        }
+                    }
+                    else{
+                        System.out.println("Operation cancelled");
+                        return;
                     }
                 }
                 default -> System.out.println("Invalid option");

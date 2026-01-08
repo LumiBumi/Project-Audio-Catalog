@@ -3,5 +3,6 @@
 3|SONG|OWN MY MIND|Maneskin|Rush|191|Rock|2023
 4|SONG|TIMEZONE|Maneskin|Rush|168|Rock|2023
 5|SONG|DON't WANNA SLEEP|Maneskin|Rush|156|Rock|2023
-6|SONG|BOMBSHELL|Rustage|single|196|rap|2025
 7|SONG|ATOMIC|Rustage|single|172|rap|2025
+8|SONG|Shape of You|Ed Sheeran|Devide|233|Pop|2017
+9|SONG|Dive|Ed Sheeran|Devide|238|Pop|2017
