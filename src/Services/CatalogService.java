@@ -1,17 +1,30 @@
 package Services;
 
+import AudioFileClasses.AudioType;
 import AudioFileClasses.MediaFile;
 
 import java.util.*;
 
 public class CatalogService {
-    private List<MediaFile> catalog = new ArrayList<>();
+    private static List<MediaFile> catalog = new ArrayList<>();
 
-    public List<MediaFile> getCatalog() { return catalog; }
+    public static List<MediaFile> getCatalog() {return catalog;}
 
-    public void add(MediaFile item) { catalog.add(item); }
+    public static void createAndAdd(String title, String genre, int duration,
+                                    AudioType type, String author, int year, String album) {
+        if(isDuplicate(title, author, album)){
+            System.out.println("This song already exists in the catalog!");
+            System.out.println("   (" + title + " by " + author + " in " +  album + ")");
+            return;
+        }
+        int newId = getNextId();
+        MediaFile newItem = new MediaFile(newId, title, genre, duration, type, author, year, album);
+        catalog.add(newItem);
+    }
 
-    public int getNextId() {
+    public static void add(MediaFile mediaFile) {catalog.add(mediaFile);}
+
+    private static int getNextId() {
         int maxId = 0;
         for (MediaFile item : catalog) {
             if (item.getId() > maxId) {
@@ -21,11 +34,11 @@ public class CatalogService {
         return maxId + 1;
     }
 
-    public boolean remove(int id){
+    public static boolean remove(int id){
         return catalog.removeIf(i -> i.getId() == id);
     }
 
-    public MediaFile getById(int id){
+    public static MediaFile getById(int id){
         for (MediaFile item : catalog) {
             if (item.getId() == id) {
                 return item;
@@ -34,7 +47,25 @@ public class CatalogService {
         return null;
     }
 
-    public List<MediaFile> searchByTitle(String title) {
+    private static boolean isDuplicate(String title, String author, String album) {
+        if (album == null || album.trim().isEmpty() || album.equalsIgnoreCase("none")) {
+            album = "single";
+        } else {
+            album = album.trim();
+        }
+        for (MediaFile item : catalog) {
+            boolean titleMatch = item.getTitle().equalsIgnoreCase(title);
+            boolean authorMatch = item.getAuthor().equalsIgnoreCase(author);
+            boolean albumMatch = item.getAlbum().equalsIgnoreCase(album);
+
+            if (titleMatch && authorMatch && albumMatch) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static List<MediaFile> searchByTitle(String title) {
         List<MediaFile> list = new ArrayList<>();
         String searchTitle = title.toLowerCase();
 
@@ -46,7 +77,7 @@ public class CatalogService {
         return list;
     }
 
-    public List<MediaFile> searchByAuthor(String author) {
+    public static List<MediaFile> searchByAuthor(String author) {
         List<MediaFile> list = new ArrayList<>();
         String searchAuthor = author.toLowerCase();
 
@@ -58,7 +89,7 @@ public class CatalogService {
         return list;
     }
 
-    public List<MediaFile> searchByGenre(String genre) {
+    public static List<MediaFile> searchByGenre(String genre) {
         List<MediaFile> list = new ArrayList<>();
         String searchGenre = genre.toLowerCase();
         for (MediaFile item : catalog) {
@@ -69,7 +100,7 @@ public class CatalogService {
         return list;
     }
 
-    public List<MediaFile> searchByYear(int year) {
+    public static List<MediaFile> searchByYear(int year) {
         List<MediaFile> list = new ArrayList<>();
         for (MediaFile item : catalog) {
             if (item.getYear() == year) {
@@ -79,7 +110,7 @@ public class CatalogService {
         return list;
     }
 
-    public List<MediaFile> searchByTitleAndAuthor(String title, String author) {
+    public static List<MediaFile> searchByTitleAndAuthor(String title, String author) {
         List<MediaFile> list = new ArrayList<>();
         String searchTitle = title.toLowerCase();
         String searchAuthor = author.toLowerCase();
@@ -92,7 +123,7 @@ public class CatalogService {
         return list;
     }
 
-    public void sortByTitle() {
+    public static void sortByTitle() {
         catalog.sort(new Comparator<MediaFile>() {
             @Override
             public int compare(MediaFile item1, MediaFile item2) {

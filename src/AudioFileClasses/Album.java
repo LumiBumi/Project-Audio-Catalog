@@ -3,26 +3,24 @@ package AudioFileClasses;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Album {
-    private String name;
+public class Album extends MediaCollection {
     private String artist;
-    private int duration;
-    private List<MediaFile> album = new ArrayList<>();
 
-    public Album(String name, String artist) {
-        this.name = name;
+    public Album(String title, String artist) {
+        super(title);
         this.artist = artist;
     }
 
-    public void addMediaFile(MediaFile mediaFile) {
-
-        album.add(mediaFile);
-    }
+    public String getArtist() {return artist;}
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("Album: " + name + " (" + artist + ")\n");
-        for (MediaFile s : album) sb.append("  ").append(s).append("\n");
+        String timeString = MediaFile.formatDuration(duration);
+
+        StringBuilder sb = new StringBuilder("Album: " + title + " (" + artist + ") - Total: " + timeString + "\n");
+        for (MediaFile s : items) {
+            sb.append("  ").append(s).append("\n");
+        }
         return sb.toString();
     }
 }

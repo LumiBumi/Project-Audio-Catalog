@@ -16,7 +16,7 @@ public class PlaylistStorage {
         }
     }
 
-    public static List<Playlist> load(String file, CatalogService catalog) throws IOException {
+    public static List<Playlist> load(String file) throws IOException {
         List<Playlist> list = new ArrayList<>();
         File f = new File(file);
         if (!f.exists()) {
@@ -33,7 +33,7 @@ public class PlaylistStorage {
                 if (line.isEmpty()) continue;
 
                 if (line.startsWith("PLAYLIST")) {
-                    //PLAYLIST|Име
+                    //PLAYLIST|title
                     String[] parts = line.split("\\|");
                     if (parts.length > 1) {
                         current = new Playlist(parts[1]);
@@ -43,9 +43,9 @@ public class PlaylistStorage {
                     //ID
                     try {
                         int id = Integer.parseInt(line);
-                        MediaFile item = catalog.getById(id);
+                        MediaFile item = CatalogService.getById(id);
                         if (item != null && current != null) {
-                            current.addMediaFile(item);
+                            current.add(item);
                         }
                     } catch (NumberFormatException e) {
                         System.out.println("Skipped ID (incorrect):" + line);
