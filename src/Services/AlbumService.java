@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public class AlbumService {
-    private static List<Album> albums = new ArrayList<Album>();
+    private static List<Album> albums = new ArrayList<>();
 
     public static List<Album> getAlbums() { return albums; }
 

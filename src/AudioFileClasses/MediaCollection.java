@@ -15,6 +15,7 @@ public abstract class MediaCollection {
     }
 
     public void add(MediaFile item) {
+        if (items.contains(item)) return;
         items.add(item);
         duration += item.getDuration();
     }

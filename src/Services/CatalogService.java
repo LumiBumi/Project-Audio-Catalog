@@ -13,7 +13,7 @@ public class CatalogService {
     public static void createAndAdd(String title, String genre, int duration,
                                     AudioType type, String author, int year, String album) {
         if(isDuplicate(title, author, album)){
-            System.out.println("This song already exists in the catalog!");
+            System.out.println("This media already exists in the catalog!");
             System.out.println("   (" + title + " by " + author + " in " +  album + ")");
             return;
         }
@@ -54,6 +54,12 @@ public class CatalogService {
             album = album.trim();
         }
         for (MediaFile item : catalog) {
+            if (item == null) {
+                continue;
+            }
+            if (item.getTitle() == null || item.getAuthor() == null) {
+                continue;
+            }
             boolean titleMatch = item.getTitle().equalsIgnoreCase(title);
             boolean authorMatch = item.getAuthor().equalsIgnoreCase(author);
             boolean albumMatch = item.getAlbum().equalsIgnoreCase(album);

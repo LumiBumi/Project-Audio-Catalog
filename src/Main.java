@@ -305,13 +305,15 @@ public class Main {
             return;
         }
 
-        while (true) {
+        boolean pleylistExists = true;
+        while (pleylistExists) {
             System.out.println("\n    Managing: " + p.getTitle());
             System.out.println("1. Show songs");
             System.out.println("2. Add song (Smart Search)");
             System.out.println("3. Remove song from Playlist");
             System.out.println("4. Sort by Title");
             System.out.println("5. Search inside Playlist");
+            System.out.println("6. Remove Playlist");
             System.out.println("0. Back");
             System.out.print("Choice: ");
             String ch = sc.nextLine();
@@ -409,6 +411,14 @@ public class Main {
                     } else {
                         System.out.println("Found " + results.size() + " songs:");
                         for (MediaFile m : results) System.out.println(m);
+                    }
+                }
+                case "6" -> {
+                    System.out.println("Are you sure? (Yes/No):");
+                    if(sc.nextLine().equalsIgnoreCase("yes")){
+                        PlaylistService.removePlaylist(p);
+                        System.out.println("Playlist removed");
+                        pleylistExists = false;
                     }
                 }
                 default -> System.out.println("Invalid option");

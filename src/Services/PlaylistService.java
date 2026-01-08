@@ -1,5 +1,6 @@
 package Services;
 
+import AudioFileClasses.MediaFile;
 import AudioFileClasses.Playlist;
 
 import java.util.ArrayList;
@@ -14,6 +15,11 @@ public class PlaylistService {
         if(searchByTitle(playlist.getTitle())!=null){
             return false;
         }
+        for (Playlist p : playlists){
+            if(p.getTitle().equals(playlist.getTitle())){
+
+            }
+        }
         playlists.add(playlist);
         return true;
     }
@@ -23,10 +29,9 @@ public class PlaylistService {
     }
 
     public static Playlist searchByTitle(String title) {
-        String searchTitle = title.toLowerCase();
 
         for (Playlist item : playlists) {
-            if (item.getTitle().toLowerCase().contains(searchTitle)) {
+            if (item.getTitle().toLowerCase().equalsIgnoreCase(title)) {
                 return item;
             }
         }
