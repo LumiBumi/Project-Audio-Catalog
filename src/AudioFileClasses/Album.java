@@ -1,8 +1,5 @@
 package AudioFileClasses;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Album extends MediaCollection {
     private String artist;
 
